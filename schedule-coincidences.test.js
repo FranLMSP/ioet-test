@@ -66,6 +66,9 @@ test('Test hour range coincidence', () => {
   expect(hourRangesCoincide('01:00-04:00', '02:00-05:00')).toBe(true);
   expect(hourRangesCoincide('01:00-04:00', '02:00-05:00')).toBe(true);
   expect(hourRangesCoincide('20:00-21:00', '21:15-22:15')).toBe(false);
+  expect(hourRangesCoincide('10:00-12:00', '08:00-09:00')).toBe(false);
+  expect(hourRangesCoincide('10:00-12:00', '12:00-14:00')).toBe(false);
+  expect(hourRangesCoincide('10:00-12:00', '09:00-10:00')).toBe(false);
 });
 
 test('Count schedule coincidences', () => {

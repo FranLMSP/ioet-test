@@ -40,16 +40,22 @@ class Coincidences {
     let coincidences = {};
 
     for (const employee of employeesList) {
-      const compareList = employeesList.filter((e) => e.name != employee.name && !coincidences[`${e.name}-${employee.name}`] && !coincidences[`${e.name}-${employee.name}`]);
-      for (const othereEmployee of compareList) {
-        const count = employee.schedule.countCoincidences(othereEmployee.schedule);
+      for (const otherEmployee of employeesList) {
+        if (
+          employee.name == otherEmployee.name ||
+          coincidences[`${employee.name}-${otherEmployee.name}`] ||
+          coincidences[`${otherEmployee.name}-${employee.name}`]
+        ) {
+          continue;
+        }
+        const count = employee.schedule.countCoincidences(otherEmployee.schedule);
         if (count <= 0) continue;
-        const coincidenceKey = `${employee.name}-${othereEmployee.name}`;
+        const coincidenceKey = `${employee.name}-${otherEmployee.name}`;
         coincidences[coincidenceKey] = {
           employeeA: employee,
-          employeeB: othereEmployee,
+          employeeB: otherEmployee,
           count,
-        }
+        };
       }
     }
 
@@ -72,20 +78,10 @@ const hourRangesCoincide = (a, b) => {
   */
   const [timeFromA, timeToA] = a.split('-').map((time) => (new Date(`2000-01-01 ${time}`)).getTime());
   const [timeFromB, timeToB] = b.split('-').map((time) => (new Date(`2000-01-01 ${time}`)).getTime());
-  const coincide = (timeToA >= timeFromB && timeToA <= timeToB) ||
-                   (timeFromB >= timeFromA && timeFromB <= timeToA);
-
-  return coincide;
-}
-
-const mapCoincidences = (inputText) => {
-  const employeesList = inputText
-    .trim()
-    .split('\n')
-    .map((text) => new Employee(text));
-
-  let coincidences = {};
-
+  if (timeToA <= timeFromB) return false;
+  if (timeFromA >= timeToB) return false;
+  return (timeToA >= timeFromB && timeToA <= timeToB) ||
+         (timeFromB >= timeFromA && timeFromB <= timeToA);
 }
 
 const generateTable = (inputText) => {

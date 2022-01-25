@@ -97,6 +97,9 @@ time B:    |-----|
 ```
 - If the _end_ of time A is higher than the _start_ of the time B, and if the _end_ of time A is lower than the _end_ of the of time B, then we have a coincidence!
 - If the _start_ of time B is higher than the _start_ of the time A, and if the _start_ of time B is _lower_ than the _end_ of the of time A, then this is also a coincidence!
+With a couple of exceptions:
+- If the _start_ of timeA is lower than the _end_ of time B, it's not a coincidence.
+- If the _end_ of timeA is lower than the _start_ of time B, it's not a coincidence.
 
 But how do we implement this as code?
 
@@ -105,8 +108,10 @@ The implementation would be this:
 ```javascript
   const [timeFromA, timeToA] = a.split('-').map((time) => (new Date(`2000-01-01 ${time}`)).getTime());
   const [timeFromB, timeToB] = b.split('-').map((time) => (new Date(`2000-01-01 ${time}`)).getTime());
-  const coincide = (timeToA >= timeFromB && timeToA <= timeToB) ||
-                   (timeFromB >= timeFromA && timeFromB <= timeToA);
+  if (timeToA <= timeFromB) return false;
+  if (timeFromA >= timeToB) return false;
+  return (timeToA >= timeFromB && timeToA <= timeToB) ||
+         (timeFromB >= timeFromA && timeFromB <= timeToA);
 ```
 
 ## 4. Getting a list of the coincidences
@@ -122,30 +127,33 @@ So it's easier to convert it to any other format we want.
 Basically we loop through the employees list, and we compare each employee to the other ones.
 
 ```javascript
-  let coincidences = {};
+let coincidences = {};
 
-  // We loop through the list
-  for (const employee of employeesList) {
-    // We compare the employee against the other employees that we want to compare with
-    const compareList = employeesList.filter((e) => {
+// We loop through the list
+for (const employee of employeesList) {
+  for (const otherEmployee of employeesList) {
+    if (
       // We don't need to compare with the same employee
-      e.name != employee.name &&
-      // Check whether the employee was already compared
-      !coincidences[`${e.name}-${employee.name}`] && !coincidences[`${e.name}-${employee.name}`]);
-    for (const othereEmployee of compareList) {
-      // Get the amount of coincidences between the schedules
-      const count = employee.schedule.countCoincidences(othereEmployee.schedule);
-      // We don't want to add the employees to the list if there are no coincidences
-      if (count <= 0) continue;
-      // We save the employees and the coincidences count in a map with the key EMPLOYEE-EMPLOYEE so we can check latter if they were already compared
-      const coincidenceKey = `${employee.name}-${othereEmployee.name}`;
-      coincidences[coincidenceKey] = {
-        employeeA: employee,
-        employeeB: othereEmployee,
-        count,
-      }
+      employee.name == otherEmployee.name ||
+      // Check whether the employee pair was already compared
+      coincidences[`${employee.name}-${otherEmployee.name}`] ||
+      coincidences[`${otherEmployee.name}-${employee.name}`]
+    ) {
+      continue;
     }
+    // Get the amount of coincidences between the schedules
+    const count = employee.schedule.countCoincidences(otherEmployee.schedule);
+    // We don't want to add the employees to the list if there are no coincidences
+    if (count <= 0) continue;
+      // We save the employees and the coincidences count in a map with the key EMPLOYEE-EMPLOYEE so we can check latter if they were already compared
+    const coincidenceKey = `${employee.name}-${otherEmployee.name}`;
+    coincidences[coincidenceKey] = {
+      employeeA: employee,
+      employeeB: otherEmployee,
+      count,
+    };
   }
+}
 ```
 And we convert the map to a list with
 ```
