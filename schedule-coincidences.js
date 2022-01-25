@@ -14,9 +14,7 @@ class Schedule {
       return;
     }
     const dayNames = text.split(',').map((s) => s.substring(0, 2));
-    const hours = text
-      .split(',')
-      .map((text) => text.substring(2));
+    const hours = text.split(',').map((text) => text.substring(2));
     for (const index in dayNames) {
       const day = dayNames[index];
       const hour = hours[index];

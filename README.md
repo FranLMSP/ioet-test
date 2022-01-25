@@ -2,7 +2,12 @@
 This is a coding test for the ioet company.
 
 ## How to run
-First, install the `jest` dependency with `npm` or `yarn`
+First, clone the repository
+```
+git clone https://github.com/FranLMSP/ioet-test.git
+cd ioet-test
+```
+Install the `jest` dependency with `npm` or `yarn`
 ```bash
 npm install
 ```
@@ -141,6 +146,10 @@ Basically we loop through the employees list, and we compare each employee to th
       }
     }
   }
+```
+And we convert the map to a list with
+```
+Object.values(coincidences);
 ```
 
 ## 5. Output
