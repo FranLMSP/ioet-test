@@ -145,6 +145,7 @@ Basically we loop through the employees list, and we compare each employee to th
 
 ## 5. Output
 And finally we just print the result!
+```
 const table = this.coincidences
       .map((coincidence) => `${coincidence.employeeA.name}-${coincidence.employeeB.name}: ${coincidence.count}`)
       .join('\n');
