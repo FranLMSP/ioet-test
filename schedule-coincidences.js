@@ -2,6 +2,7 @@ const getEmployeesList = (textInput) => {
   let list = [];
   const lines = textInput.split('\n');
   for (const line of lines) {
+    if (!line.trim()) continue;
     const [name, scheduleText] = line.split('=');
     list.push({
       name,
@@ -14,17 +15,18 @@ const getEmployeesList = (textInput) => {
 
 const getEmployeeSchedule = (scheduleText) => {
   let days = {};
-  const daysTexts = scheduleText.split(',');
-  for (dayText of daysTexts) {
-    const dayName = dayText.substring(0, 2);
-    const [from, to] = dayText
-      .substring(2)
-      .split('-')
-      .map((hoursText) => {
-        const [hours, mins] = hoursText.split(':');
-        return {hours: parseInt(hours), mins: parseInt(mins)};
-      });
-    days[dayName] = {from, to};
+  if (!scheduleText.trim()) return {};
+  const dayNames = scheduleText.split(',').map((text) => text.substring(0, 2));
+  const hours = scheduleText
+    .split(',')
+    .map((text) => {
+      const [from, to] = text.substring(2).split('-');
+      return {from, to};
+    });
+  for (index in dayNames) {
+    const day = dayNames[index];
+    const hour = hours[index];
+    days[day] = hour;
   }
 
   return days;
