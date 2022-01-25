@@ -29,7 +29,8 @@ class Schedule {
   countCoincidences(otherSchedule) {
     let total = 0;
     for (const day in this.days) {
-      if (!otherSchedule.days[day] || !hourRangesCoincide(this.days[day], otherSchedule.days[day])) continue;
+      if (!otherSchedule.days[day]) continue;
+      if (!hourRangesCoincide(this.days[day], otherSchedule.days[day])) continue;
       total += 1;
     }
     return total;
