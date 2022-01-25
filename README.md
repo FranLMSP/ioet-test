@@ -130,26 +130,26 @@ Basically we loop through the employees list, and we compare each employee to th
 let coincidences = {};
 
 // We loop through the list
-for (const employee of employeesList) {
-  for (const otherEmployee of employeesList) {
+for (const employeeA of employeesList) {
+  for (const employeeB of employeesList) {
     if (
       // We don't need to compare with the same employee
-      employee.name == otherEmployee.name ||
+      employeeA.name == employeeB.name ||
       // Check whether the employee pair was already compared
-      coincidences[`${employee.name}-${otherEmployee.name}`] ||
-      coincidences[`${otherEmployee.name}-${employee.name}`]
+      coincidences[`${employeeA.name}-${employeeB.name}`] ||
+      coincidences[`${employeeB.name}-${employeeA.name}`]
     ) {
       continue;
     }
     // Get the amount of coincidences between the schedules
-    const count = employee.schedule.countCoincidences(otherEmployee.schedule);
+    const count = employeeA.schedule.countCoincidences(employeeB.schedule);
     // We don't want to add the employees to the list if there are no coincidences
     if (count <= 0) continue;
       // We save the employees and the coincidences count in a map with the key EMPLOYEE-EMPLOYEE so we can check latter if they were already compared
-    const coincidenceKey = `${employee.name}-${otherEmployee.name}`;
+    const coincidenceKey = `${employeeA.name}-${employeeB.name}`;
     coincidences[coincidenceKey] = {
-      employeeA: employee,
-      employeeB: otherEmployee,
+      employeeA,
+      employeeB,
       count,
     };
   }

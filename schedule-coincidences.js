@@ -39,21 +39,21 @@ class Coincidences {
   constructor(employeesList) {
     let coincidences = {};
 
-    for (const employee of employeesList) {
-      for (const otherEmployee of employeesList) {
+    for (const employeeA of employeesList) {
+      for (const employeeB of employeesList) {
         if (
-          employee.name == otherEmployee.name ||
-          coincidences[`${employee.name}-${otherEmployee.name}`] ||
-          coincidences[`${otherEmployee.name}-${employee.name}`]
+          employeeA.name == employeeB.name ||
+          coincidences[`${employeeA.name}-${employeeB.name}`] ||
+          coincidences[`${employeeB.name}-${employeeA.name}`]
         ) {
           continue;
         }
-        const count = employee.schedule.countCoincidences(otherEmployee.schedule);
+        const count = employeeA.schedule.countCoincidences(employeeB.schedule);
         if (count <= 0) continue;
-        const coincidenceKey = `${employee.name}-${otherEmployee.name}`;
+        const coincidenceKey = `${employeeA.name}-${employeeB.name}`;
         coincidences[coincidenceKey] = {
-          employeeA: employee,
-          employeeB: otherEmployee,
+          employeeA,
+          employeeB,
           count,
         };
       }
