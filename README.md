@@ -97,7 +97,9 @@ time B:    |-----|
 ```
 - If the _end_ of time A is higher than the _start_ of the time B, and if the _end_ of time A is lower than the _end_ of the of time B, then we have a coincidence!
 - If the _start_ of time B is higher than the _start_ of the time A, and if the _start_ of time B is _lower_ than the _end_ of the of time A, then this is also a coincidence!
+
 With a couple of exceptions:
+
 - If the _start_ of timeA is lower than the _end_ of time B, it's not a coincidence.
 - If the _end_ of timeA is lower than the _start_ of time B, it's not a coincidence.
 
