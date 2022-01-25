@@ -39,5 +39,24 @@ const processEmployeesText = (textInput) => {
   return '';
 }
 
+const hourRangesCoincide = (a, b) => {
+  /* 
+      from    to
+    A - |-----|
+    B -    |-----|
+         from    to
+  */
+  const [timeFromA, timeToA] = a.split('-').map((time) => (new Date(`2000-01-01 ${time}`)).getTime());
+  const [timeFromB, timeToB] = b.split('-').map((time) => (new Date(`2000-01-01 ${time}`)).getTime());
+  const coincide = (timeToA >= timeFromB && timeToA <= timeToB) ||
+                   (timeFromB >= timeFromA && timeFromB <= timeToA);
 
-module.exports = { getEmployeesList, getEmployeeSchedule, getHourCoincidences };
+  return coincide;
+}
+
+module.exports = {
+  getEmployeesList,
+  getEmployeeSchedule,
+  getHourCoincidences,
+  hourRangesCoincide,
+};

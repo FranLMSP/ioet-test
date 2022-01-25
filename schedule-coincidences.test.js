@@ -1,4 +1,9 @@
-const { getEmployeeSchedule, getEmployeesList, processEmployeesText } = require('./schedule-coincidences');
+const {
+  getEmployeeSchedule,
+  getEmployeesList,
+  processEmployeesText,
+  hourRangesCoincide,
+} = require('./schedule-coincidences');
 
 test('Decode employee schedule text list', () => {
   expect(getEmployeeSchedule('MO10:15-12:00')).toEqual({
@@ -136,6 +141,13 @@ ASTRID=MO10:00-12:00,TH12:00-14:00,SU20:00-21:00
       },
     },
   ]);
+});
+
+test('Test hour range coincidence', () => {
+  expect(hourRangesCoincide('20:00-21:00', '20:00-21:00')).toBe(true);
+  expect(hourRangesCoincide('01:00-04:00', '02:00-05:00')).toBe(true);
+  expect(hourRangesCoincide('01:00-04:00', '02:00-05:00')).toBe(true);
+  expect(hourRangesCoincide('20:00-21:00', '21:15-22:15')).toBe(false);
 });
 
 /* test('Test process the text input', () => {
